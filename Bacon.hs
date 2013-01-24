@@ -2,6 +2,7 @@ module Bacon (
       EventStream
     , eventStream
     , onValue
+    , delay
 
     , MouseMoveEvent, clientX, clientY
     , mousemoveEventStream
@@ -22,6 +23,10 @@ eventStream = ffi "%2['asEventStream'](%1)"
 -- | Wrapper for Bacon's "onValue"
 onValue :: Foreign a => EventStream a -> (a -> Fay ()) -> Fay ()
 onValue = ffi "%1['onValue'](%2)"
+
+-- | Wrapper for Bacon's "delay"
+delay :: EventStream a -> Int -> Fay (EventStream a)
+delay = ffi "%1['delay'](%2)"
 
 
 -- | 'mousemove' event type
