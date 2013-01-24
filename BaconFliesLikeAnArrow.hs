@@ -1,10 +1,15 @@
 module BaconFliesLikeAnArrow where
 
-import Prelude
+import Prelude hiding (map)
 import Language.Fay.FFI
 
 import JQuery
 import Bacon
+
+setCss :: JQuery -> String -> EventStream String -> Fay ()
+setCss elem prop stream = onValue stream $ void . css elem prop
+  where
+    void m = m >>= \_ -> return ()
 
 main :: Fay ()
 main = ready $ do
@@ -19,7 +24,6 @@ main = ready $ do
         appendTo s container
 
         stream <- delay mouseMove (100 * i)
-        onValue stream $ \event -> do
-            css s "top" $ show (clientY event) ++ "px"
-            css s "left" $ show (clientX event + i * 10 + 15) ++ "px"
-            return ()
+
+        map (\event -> show (clientX event + i * 10 + 15) ++ "px") stream >>= setCss s "left"
+        map (\event -> show (clientY event) ++ "px") stream >>= setCss s "top"

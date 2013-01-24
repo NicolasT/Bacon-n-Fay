@@ -3,11 +3,13 @@ module Bacon (
     , eventStream
     , onValue
     , delay
+    , map
 
     , MouseMoveEvent, clientX, clientY
     , mousemoveEventStream
     ) where
 
+import Prelude hiding (map)
 import Language.Fay.FFI
 
 import JQuery (JQuery)
@@ -27,6 +29,10 @@ onValue = ffi "%1['onValue'](%2)"
 -- | Wrapper for Bacon's "delay"
 delay :: EventStream a -> Int -> Fay (EventStream a)
 delay = ffi "%1['delay'](%2)"
+
+-- | Wrapper for Bacon's "map"
+map :: (a -> b) -> EventStream a -> Fay (EventStream b)
+map = ffi "%2['map'](%1)"
 
 
 -- | 'mousemove' event type
